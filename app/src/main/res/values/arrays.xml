@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="colors">
+        <item>Weiss</item>
+        <item>Grau</item>
+        <item>Orange</item>
+        <item>Lila</item>
+    </string-array>
+    <string-array name="color__values">
+        <item>#ffffff</item>
+        <item>#a3a0a0</item>
+        <item>#fcba03</item>
+        <item>#be03fc</item>
+    </string-array>
+</resources>

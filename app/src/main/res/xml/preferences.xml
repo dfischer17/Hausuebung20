@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:iconSpaceReserved="false" >
+
+    <CheckBoxPreference
+        android:layout_width="match_parent"
+        android:defaultValue="false"
+        android:icon="@null"
+        android:iconSpaceReserved="false"
+        android:key="hideCompletedTasks"
+        android:title="Fertige Tasks verstecken" />
+    <ListPreference
+        android:layout_width="match_parent"
+        android:defaultValue="true"
+        android:entries="@array/colors"
+        android:entryValues="@array/color__values"
+        android:iconSpaceReserved="false"
+        android:key="selectedColorCode"
+        android:icon="@null"
+        android:title="Hintergrundfarbe auswaehlen" />
+</PreferenceScreen>
