@@ -7,7 +7,9 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -46,6 +48,25 @@ public class MainActivity extends AppCompatActivity {
         //todo task aus File einlesen
         taskAdapter = new TaskAdapter(this, R.layout.list_item, taskList);
         listView.setAdapter(taskAdapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                taskList.get(position).setDone(!taskList.get(position).isDone());
+                if (prefs.getBoolean("hideCompletedTasks", false)) {
+                    taskList.remove(position);
+                }
+                taskAdapter.notifyDataSetChanged();
+                listView.setAdapter(taskAdapter);
+            }
+        });
+        // todo loeschen
+        Task task = new Task("Test", LocalDateTime.now());
+        task.setDone(true);
+        Task task2 = new Task("Test2", LocalDateTime.now());
+        task2.setDone(false);
+        addTask(task);
+        addTask(task2);
 
         // add button initialisieren
         addButton = findViewById(R.id.addTaskButton);
@@ -65,6 +86,8 @@ public class MainActivity extends AppCompatActivity {
         // Preference initialisieren
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
         preferenceChangeListener = (sharedPrefs, key) -> preferenceChanged(sharedPrefs, key);
+        //todo funktioniert?
+        prefs.registerOnSharedPreferenceChangeListener(preferenceChangeListener);
 
         linearLayout = findViewById(R.id.background);
     }
@@ -111,25 +134,30 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void preferenceChanged(SharedPreferences sharedPrefs, String key) {
-        String sValue = sharedPrefs.getString(key, "");
+
 
         // Entsprechende Preference akutalisieren
         switch (key) {
             case "hideCompletedTasks":
+                boolean bValue = sharedPrefs.getBoolean(key, false);
+                List<Task> removeList = new ArrayList<>();
+
+                for (Task curTask : taskList) {
+                    if (curTask.isDone() == bValue) {
+                        removeList.add(curTask);
+                    }
+                }
+                taskList.removeAll(removeList);
+                taskAdapter.notifyDataSetChanged();
                 break;
 
             case "selectedColorCode":
-                int color = Color.parseColor(prefs.getString("Grau", ""));
+                String sValue = sharedPrefs.getString(key, "");
+                int color = Color.parseColor(sValue);
                 linearLayout.setBackgroundColor(color);
                 break;
         }
-
-        /*
-        Map<String, ?> allEntries = sharedPrefs.getAll();
-        String sValue = "";
-        if (allEntries.get(key) instanceof Boolean)
-            sValue = sharedPrefs.getString(key,"");
-        else if (allEntries.get(key) instanceof )
-        */
     }
+
+
 }
